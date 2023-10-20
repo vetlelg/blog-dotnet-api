@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "yW1H4Eg8XNJ7v+0Un3Xi1M98AnKlLiNiwusNzY5HIuw=",
+  "Source": "blog-dotnet-api",
+  "BasePath": "_content/blog-dotnet-api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
