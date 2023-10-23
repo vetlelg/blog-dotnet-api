@@ -12,6 +12,19 @@ builder.Services.AddDbContext<UserContext>(opt => opt.UseInMemoryDatabase("User"
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connection = String.Empty;
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
+    connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+}
+else
+{
+    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+}
+
+builder.Services.AddDbContext<UserContext>(options => options.UseSqlServer(connection));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,6 +34,21 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.MapGet("/User", (UserContext context) =>
+{
+    return context.Users.ToList();
+})
+.WithName("GetUsers")
+.WithOpenApi();
+
+app.MapPost("/Users", (User user, UserContext context) =>
+{
+    context.Add(user);
+    context.SaveChanges();
+})
+.WithName("CreatePerson")
+.WithOpenApi();
 
 app.MapControllers();
 
